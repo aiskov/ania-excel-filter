@@ -1,6 +1,6 @@
 from openpyxl import load_workbook, Workbook
 import re 
-import ania_utils
+import utils
 
 # Откуда копировать
 origin_filename = 'test.xlsx'
@@ -23,8 +23,8 @@ group_by = 'A'
 
 # Условие выбор группы
 def group_condition(ws, rows):
-	# Указываем ania_utils.sum_by_group(ws, rows, <>, <>)
-	return ania_utils.is_represented(ws, rows, 'O', 'ZIMA 2012')
+	# Указываем utils.sum_by_group(ws, rows, <>, <>)
+	return utils.is_represented(ws, rows, 'O', 'ZIMA 2012')
 	
 ############################################################################
 # Open origin
