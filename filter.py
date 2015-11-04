@@ -76,4 +76,4 @@ for row in rows_range:
 wb_target.save(filename = target_filename)
 
 # Print report and wait input
-input("Filtration done. Please press `Enter` to exit")
+raw_input("Press Enter to continue...")
