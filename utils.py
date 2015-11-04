@@ -13,8 +13,10 @@ def sum_by_group(ws, rows, group_column, sum_column):
 	return result
 
 def is_represented(ws, rows, group_column, value):
+	value = [value] if not isinstance(value, list) else value
+	
 	for row in rows:
-		if ws['%s%s' % (group_column, row)].value == value:
+		if ws['%s%s' % (group_column, row)].value in value:
 			return True
 
 	return False
