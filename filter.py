@@ -1,6 +1,7 @@
 from openpyxl import load_workbook, Workbook
 import re 
 import utils
+import sys
 
 # Откуда копировать
 origin_filename = 'test.xlsx'
@@ -31,6 +32,8 @@ def group_condition(ws, rows):
 wb_origin = load_workbook(filename = origin_filename)
 ws_origin = wb_origin[origin_sheetname]
 
+print('Source file opened')
+
 # Open target
 wb_target = Workbook()
 ws_target = wb_target.active
@@ -45,7 +48,9 @@ else:
 	# Group rows 
 	groups = dict()
 
+	print('Starting grouping')
 	for row in rows_range:
+		sys.stdout.write('.')
 		group_value = ws_origin['%s%s' % (group_by, row)].value
 
 		if group_value not in groups:
@@ -53,15 +58,23 @@ else:
 
 		groups[group_value].append(row)
 
+	print('File grouped to %s by column %s.' % (len(groups, group_by)))
+
 	# Check group condition
+	print('Starting group filtering')
 	for key, rows in groups.iteritems():
+		sys.stdout.write('.')
 		if group_condition(ws_origin, rows):
 			selected_groups.append(key)
+
+	print('%s groups found that match the conditions.' % len(selected_groups))
 
 # Copy 
 target_row = 1
 
+print('Start copying')
 for row in rows_range:
+	sys.stdout.write('.')
 	check = not row_condition or row_condition(ws_origin, row)
 	check = check and (not group_condition or ws_origin['%s%s' % (group_by, row)].value in selected_groups)
 
