@@ -28,6 +28,8 @@ def group_condition(ws, rows):
 	return utils.is_represented(ws, rows, 'O', 'ZIMA 2012')
 	
 ############################################################################
+print('Source file openings')
+
 # Open origin
 wb_origin = load_workbook(filename = origin_filename)
 ws_origin = wb_origin[origin_sheetname]
