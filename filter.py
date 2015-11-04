@@ -58,7 +58,7 @@ else:
 
 		groups[group_value].append(row)
 
-	print('File grouped to %s by column %s.' % (len(groups, group_by)))
+	print('File grouped to %s by column %s.' % (len(groups), group_by))
 
 	# Check group condition
 	print('Starting group filtering')
