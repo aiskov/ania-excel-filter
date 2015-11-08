@@ -24,10 +24,10 @@ else:
     for row in rows_range:
         group_value = ws_origin['%s%s' % (group_by, row)].value
 
-    if group_value not in groups:
-        groups[group_value] = []
+        if group_value not in groups:
+            groups[group_value] = []
 
-    groups[group_value].append(row)
+        groups[group_value].append(row)
 
 print('File grouped to %s by column %s.' % (len(groups), group_by))
 
