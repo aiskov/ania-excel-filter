@@ -1,5 +1,6 @@
 from openpyxl import load_workbook, Workbook
 import utils
+import csv
 from settings import *
 
 print('Source file opening')
@@ -9,11 +10,6 @@ wb_origin = load_workbook(filename = origin_filename)
 ws_origin = wb_origin[origin_sheetname]
 
 print('Source file opened')
-
-# Open target
-wb_target = Workbook()
-ws_target = wb_target.active
-ws_target.title = target_sheetname
 
 # Check groups condition in case if exists
 if not group_condition:
@@ -44,22 +40,43 @@ else:
 	print('%s groups found that match the conditions.' % len(selected_groups))
 
 # Copy 
-target_row = 1
+if target_filename.endswith('xlsx'):
+	target_row = 1
+	
+	# Open target
+	wb_target = Workbook()
+	ws_target = wb_target.active
+	ws_target.title = target_sheetname
 
-print('Start copying')
-for row in rows_range:
-	check = not row_condition or row_condition(ws_origin, row)
-	check = check and (not group_condition or ws_origin['%s%s' % (group_by, row)].value in selected_groups)
+	print('Start copying')
+	for row in rows_range:
+		check = not row_condition or row_condition(ws_origin, row)
+		check = check and (not group_condition or ws_origin['%s%s' % (group_by, row)].value in selected_groups)
+	
+		if check:
+			for column in columns:
+				ws_target['%s%s' % (column, target_row)] = ws_origin['%s%s' % (column, row)].value
+			
+			target_row += 1
 
-	if check:
-		for column in columns:
-			ws_target['%s%s' % (column, target_row)] = ws_origin['%s%s' % (column, row)].value
+	# Save target file
+	wb_target.save(filename = target_filename)
+else:
+	with open(target_filename, 'wb') as f:
+	    wb_target = csv.writer(f)
+	    
+		print('Start copying')
+		for row in rows_range:
+			check = not row_condition or row_condition(ws_origin, row)
+			check = check and (not group_condition or ws_origin['%s%s' % (group_by, row)].value in selected_groups)
 		
-		target_row += 1
+			if check:
+				row = []
+				for column in columns:
+					row.append(ws_origin['%s%s' % (column, row)].value)
+				
+			    wb_target.writerow(row)
 
-
-# Save target file
-wb_target.save(filename = target_filename)
 
 # Print report and wait input
 raw_input("Press Enter to continue...")
