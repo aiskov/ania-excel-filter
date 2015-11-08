@@ -65,17 +65,17 @@ else:
     with open(target_filename, 'wb') as f:
         wb_target = csv.writer(f)
 
-    print('Start copying')
-    for row in rows_range:
-        check = not row_condition or row_condition(ws_origin, row)
-        check = check and (not group_condition or ws_origin['%s%s' % (group_by, row)].value in selected_groups)
-
-        if check:
-            row = []
-            for column in columns:
-                row.append(ws_origin['%s%s' % (column, row)].value)
-
-        wb_target.writerow(row)
+        print('Start copying')
+        for row in rows_range:
+            check = not row_condition or row_condition(ws_origin, row)
+            check = check and (not group_condition or ws_origin['%s%s' % (group_by, row)].value in selected_groups)
+    
+            if check:
+                row = []
+                for column in columns:
+                    row.append(ws_origin['%s%s' % (column, row)].value)
+    
+            wb_target.writerow(row)
 
 
 # Print report and wait input
